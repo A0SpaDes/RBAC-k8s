@@ -19,6 +19,7 @@
   openssl x509 -req -in truongnqk.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out truongnqk.crt -days 3650
 
 2./ tạo Role RBAC & RoleBinding
+```
 # role-temp.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -31,6 +32,7 @@ rules:
 - apiGroups: ["", "apps", "batch", "networking.k8s.io"]
   resources: ["*"]
   verbs: ["*"]
+```
 
 ---
 # rolebinding-temp.yaml
