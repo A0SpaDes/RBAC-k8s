@@ -10,17 +10,23 @@
 *** Thực hiện:
 1./ ví dụ về: tạo file client-certificate & client-key cho client
 
-# Nếu user đang ssh không phải root -> copy file CA.crt & CA.key (trong /etc/kubernetes.pki/) ra trước để map với gen crt & key riêng cho User:
-# tạo new key cho user truongnqk
+Nếu user đang ssh không phải root -> copy file CA.crt & CA.key (trong /etc/kubernetes.pki/) ra trước để map với gen crt & key riêng cho User:
+Tạo new key cho user truongnqk
+```
   openssl genrsa -out truongnqk.key 2048
-# tạo file csr chứa thông tin name user và tên group - ví dụ dưới đây, tên user là "truongnqk admin" và group là "Blade-k8s-lab".
+```
+Tạo file csr chứa thông tin name user và tên group - ví dụ dưới đây, tên user là "truongnqk admin" và group là "Blade-k8s-lab".
+```
   openssl req -new -key truongnqk.key -out truongnqk.csr -subj "/CN=truongnqk admin/O=Blade-K8s-Lab"
-# kết hợp với file ca.crt và ca.key của host để gen ra crt và key của user.
+```
+Kết hợp với file ca.crt và ca.key của host để gen ra crt và key của user.
+```
   openssl x509 -req -in truongnqk.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out truongnqk.crt -days 3650
+```
 
 2./ tạo Role RBAC & RoleBinding
-```
 # role-temp.yaml
+```
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -36,6 +42,7 @@ rules:
 
 ---
 # rolebinding-temp.yaml
+```
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -51,9 +58,10 @@ roleRef:
   kind: Role
   name: manage-admin
   apiGroup: rbac.authorization.k8s.io
-
+```
 ---
 # cluster-role-temp.yaml
+```
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -62,9 +70,10 @@ rules:
 - apiGroups: [""]
   resources: ["*"]
   verbs: ["*"]
-  
+```
 ---
 # cluster-rolebinding-temp.yaml
+```
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -77,5 +86,5 @@ roleRef:
   kind: ClusterRole
   name: cluster-role-manage
   apiGroup: rbac.authorization.k8s.io
-  
+```  
 ---
