@@ -8,3 +8,4 @@ spec:
   expirationSeconds: 8640000   # minimum - 600sec/10min
   usages:
   - client auth
+###
